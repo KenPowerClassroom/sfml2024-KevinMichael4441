@@ -2,15 +2,19 @@
 #include <time.h>
 using namespace sf;
 
+const int SCREEN_HEIGHT = 480;
+const int SCREEN_WIDTH = 320;
 const int HEIGHT = 20;
 const int WIDTH = 10;
+const int MAX_BLOCKS = 4;
+const int NO_OF_FIGURES = 7;
 
 int field[HEIGHT][WIDTH] = {0};
 
 struct Point
-{int x,y;} actual[4], placeHolder[4];
+{int x,y;} actual[MAX_BLOCKS], placeHolder[MAX_BLOCKS];
 
-int figures[7][4] =
+int figures[NO_OF_FIGURES][MAX_BLOCKS] =
 {
     1,3,5,7, // I
     2,4,5,7, // Z
@@ -23,11 +27,11 @@ int figures[7][4] =
 
 bool check()
 {
-   for (int i=0;i<4;i++)
-      if (actual[i].x<0 || actual[i].x>= WIDTH || actual[i].y>= HEIGHT) return 0;
-      else if (field[actual[i].y][actual[i].x]) return 0;
+   for (int i=0;i<MAX_BLOCKS;i++)
+      if (actual[i].x<0 || actual[i].x>= WIDTH || actual[i].y>= HEIGHT) return false;
+      else if (field[actual[i].y][actual[i].x]) return false;
 
-   return 1;
+   return true;
 };
 
 
@@ -35,7 +39,7 @@ int tetris()
 {
     srand(time(0));     
 
-    RenderWindow window(VideoMode(320, 480), "The Game!");
+    RenderWindow window(VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "The Game!");
 
     Texture tilesTexture,backgroundTexture,frameTexture;
     tilesTexture.loadFromFile("images/tetris/tiles.png");
@@ -70,35 +74,35 @@ int tetris()
         if (Keyboard::isKeyPressed(Keyboard::Down)) delay = 0.05;
 
         //// <- Move -> ///
-        for (int i=0;i<4;i++)  { placeHolder[i]= actual[i]; actual[i].x+= moveInX; }
-        if (!check()) for (int i=0;i<4;i++) actual[i]= placeHolder[i];
+        for (int i=0;i<MAX_BLOCKS;i++)  { placeHolder[i]= actual[i]; actual[i].x+= moveInX; }
+        if (!check()) for (int i=0;i<MAX_BLOCKS;i++) actual[i]= placeHolder[i];
 
         //////Rotate//////
         if (shouldRotate)
         {
             Point point = actual[1]; //center of rotation
-            for (int i=0;i<4;i++)
+            for (int i=0;i<MAX_BLOCKS;i++)
             {
                 int deltaX = actual[i].y- point.y;
                 int deltaY = actual[i].x- point.x;
                 actual[i].x = point.x - deltaX;
                 actual[i].y = point.y + deltaY;
             }
-            if (!check()) for (int i=0;i<4;i++) actual[i]= placeHolder[i];
+            if (!check()) for (int i=0;i<MAX_BLOCKS;i++) actual[i]= placeHolder[i];
         }
 
         ///////Tick//////
         if (timer>delay)
         {
-            for (int i=0;i<4;i++) { placeHolder[i]= actual[i]; actual[i].y+=1; }
+            for (int i=0;i<MAX_BLOCKS;i++) { placeHolder[i]= actual[i]; actual[i].y+=1; }
 
             if (!check())
             {
-                for (int i=0;i<4;i++) field[placeHolder[i].y][placeHolder[i].x]=colorNum;
+                for (int i=0;i<MAX_BLOCKS;i++) field[placeHolder[i].y][placeHolder[i].x]=colorNum;
 
                 colorNum=1+rand()%7;
                 int randomNumber=rand()%7;
-                for (int i=0;i<4;i++)
+                for (int i=0;i<MAX_BLOCKS;i++)
                 {
                     actual[i].x = figures[randomNumber][i] % 2;
                     actual[i].y = figures[randomNumber][i] / 2;
@@ -137,7 +141,7 @@ int tetris()
             window.draw(tile);
         }
 
-        for (int i=0;i<4;i++)
+        for (int i=0;i<MAX_BLOCKS;i++)
         {
             tile.setTextureRect(IntRect(colorNum*18,0,18,18));
             tile.setPosition(actual[i].x*18, actual[i].y*18);
