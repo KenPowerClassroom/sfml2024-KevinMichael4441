@@ -16,7 +16,6 @@ bool shouldRotate;
 int colorNum;
 float timer;
 float delay;
-Texture tilesTexture, backgroundTexture, frameTexture;
 Sprite tile, background, frame;
 
 int field[HEIGHT][WIDTH] = {0};
@@ -35,17 +34,17 @@ int figures[NO_OF_FIGURES][MAX_BLOCKS] =
     2,3,4,5, // O
 };
 
-void initializeGame()
+void initializeGame(Texture &t_tilesTexture, Texture &t_backgroundTexture, Texture &t_frameTexture)
 {
     //srand(time(0));
 
-    tilesTexture.loadFromFile("images/tetris/tiles.png");
-    backgroundTexture.loadFromFile("images/tetris/background.png");
-    frameTexture.loadFromFile("images/tetris/frame.png");
+    t_tilesTexture.loadFromFile("images/tetris/tiles.png");
+    t_backgroundTexture.loadFromFile("images/tetris/background.png");
+    t_frameTexture.loadFromFile("images/tetris/frame.png");
 
-    tile.setTexture(tilesTexture);
-    background.setTexture(backgroundTexture);
-    frame.setTexture(frameTexture);
+    tile.setTexture(t_tilesTexture);
+    background.setTexture(t_backgroundTexture);
+    frame.setTexture(t_frameTexture);
 
     moveInX = 0;
     shouldRotate = 0;
@@ -177,7 +176,9 @@ int tetris()
 
     RenderWindow window(VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "The Game!");
 
-    initializeGame();
+    
+    Texture tilesTexture, backgroundTexture, frameTexture;
+    initializeGame(tilesTexture, backgroundTexture, frameTexture);
 
     Clock clock;
 
