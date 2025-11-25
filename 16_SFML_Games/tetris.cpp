@@ -1,5 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include <time.h>
+
+#include <memory>
+
 using namespace sf;
 
 const int SCREEN_HEIGHT = 480;
@@ -18,7 +21,11 @@ float timer;
 float delay;
 Sprite tile, background, frame;
 
-int field[HEIGHT][WIDTH] = {0};
+
+std::vector<std::vector<int>> field(HEIGHT, std::vector<int>(WIDTH, 0));
+
+
+
 
 struct Point
 {int x,y;} actual[MAX_BLOCKS], placeHolder[MAX_BLOCKS];
@@ -53,25 +60,58 @@ void initializeGame(Texture &t_tilesTexture, Texture &t_backgroundTexture, Textu
     delay = 0.3;
 }
 
-bool check()
+class Check
 {
-   for (int i=0;i<MAX_BLOCKS;i++)
-      if (actual[i].x<0 || actual[i].x>= WIDTH || actual[i].y>= HEIGHT) return false;
-      else if (field[actual[i].y][actual[i].x]) return false;
+public:
 
-   return true;
+    Check(Point t_actual[], int t_sizeofActual, std::vector<std::vector<int>> t_field)
+    {
+        m_field = t_field;
+
+        m_actual.resize(t_sizeofActual);
+        for (int index = 0; index < t_sizeofActual; index++)
+        {
+            m_actual[index] = t_actual[index];
+        }
+    }
+
+    bool runningTheCheck()
+    {
+        for (int i = 0; i < MAX_BLOCKS; i++)
+        {
+            if (actual[i].x < 0 || actual[i].x >= WIDTH || actual[i].y >= HEIGHT)
+            {
+                return false;
+            }
+            else if (field[actual[i].y][actual[i].x])
+            {
+                return false;
+            }
+        }
+            
+        return  true;
+    }
+
+
+private:
+    int const m_WIDTH = 10;
+    int const m_HEIGHT = 20;
+
+    std::vector<Point> m_actual;
+    std::vector<std::vector<int>> m_field;
+
 };
 
 void updateActual()
 {
-    if (!check())
+    Check check(actual, MAX_BLOCKS, field);
+    if (!check.runningTheCheck())
     {
         for (int i = 0; i < MAX_BLOCKS; i++)
         {
             actual[i] = placeHolder[i];
         }
     }   
-        
 }
 
 void move()
@@ -108,7 +148,8 @@ void tick()
             placeHolder[i] = actual[i]; actual[i].y += 1;
         }
 
-        if (!check())
+        Check check(actual, MAX_BLOCKS, field);
+        if (!check.runningTheCheck())
         {
             for (int i = 0; i < MAX_BLOCKS; i++)
             {
