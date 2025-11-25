@@ -34,6 +34,18 @@ bool check()
    return true;
 };
 
+void updateActual()
+{
+    if (!check())
+    {
+        for (int i = 0; i < MAX_BLOCKS; i++)
+        {
+            actual[i] = placeHolder[i];
+        }
+    }   
+        
+}
+
 
 int tetris()
 {
@@ -75,7 +87,7 @@ int tetris()
 
         //// <- Move -> ///
         for (int i=0;i<MAX_BLOCKS;i++)  { placeHolder[i]= actual[i]; actual[i].x+= moveInX; }
-        if (!check()) for (int i=0;i<MAX_BLOCKS;i++) actual[i]= placeHolder[i];
+        updateActual();
 
         //////Rotate//////
         if (shouldRotate)
@@ -88,8 +100,10 @@ int tetris()
                 actual[i].x = point.x - deltaX;
                 actual[i].y = point.y + deltaY;
             }
-            if (!check()) for (int i=0;i<MAX_BLOCKS;i++) actual[i]= placeHolder[i];
+            updateActual();
         }
+
+
 
         ///////Tick//////
         if (timer>delay)
