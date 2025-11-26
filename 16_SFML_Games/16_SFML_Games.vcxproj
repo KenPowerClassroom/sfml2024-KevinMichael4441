@@ -94,6 +94,7 @@
     <ClCompile Include="xonix.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Check.h" />
     <ClInclude Include="Connector.hpp" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Player.h" />

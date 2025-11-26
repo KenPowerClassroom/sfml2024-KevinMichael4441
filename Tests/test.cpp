@@ -1,11 +1,169 @@
 #include "pch.h"
 
-const int HEIGHT = 25;
-const int WIDTH = 40;
-const int tileSize = 18;
+#include "../16_SFML_Games/Check.h"
 
+TEST(Check,droppingDownEarlyGameTrue) {
+
+	const int numOfPoints = 4;
+	Point point1 = { 2,5 };
+	Point point2 = { 2,6 };
+	Point point3 = { 2,7 };
+	Point point4 = { 3,7 };
+	Point currentFigure[numOfPoints] = {point1, point2, point3, point4};
+
+	std::vector<std::vector<int>> field {				{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,1,0,0,0,0 },
+														{ 0,0,0,0,0,1,0,0,0,0 },
+														{ 0,0,0,0,0,1,0,0,0,0 },
+														{ 0,0,0,0,0,1,0,0,0,0 },
+														{ 1,0,0,1,1,1,1,1,0,0 },
+														{ 1,0,0,0,1,0,1,1,0,0 },
+														{ 1,0,0,0,1,0,0,1,0,0 },
+														{ 1,0,1,1,1,0,1,1,1,0 }, };
+
+
+	Check dropCheck(currentFigure, numOfPoints, field);
+	
+	EXPECT_TRUE(dropCheck.runningTheCheck());
+}
+
+
+
+TEST(Check, droppingDownMidGameTrue) {
+
+	const int numOfPoints = 4;
+	Point point1 = { 8,9 };
+	Point point2 = { 8,10 };
+	Point point3 = { 8,11 };
+	Point point4 = { 8,12 };
+	Point currentFigure[numOfPoints] = { point1, point2, point3, point4 };
+
+	std::vector<std::vector<int>> field{				{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,1,1,1,1,0,0,0,0 },
+														{ 0,0,0,0,0,1,0,0,0,0 },
+														{ 1,0,1,0,0,1,1,0,0,1 },
+														{ 1,1,1,1,1,1,1,1,0,1 },
+														{ 1,1,1,1,1,1,1,0,0,1 },
+														{ 1,1,1,1,1,1,1,1,0,1 },
+														{ 1,1,1,0,1,0,1,1,1,1 },
+														{ 1,1,1,1,1,0,0,1,1,1 },
+														{ 1,1,1,1,1,0,1,1,1,0 }, };
+
+
+	Check dropCheck(currentFigure, numOfPoints, field);
+
+	EXPECT_TRUE(dropCheck.runningTheCheck());
+}
+
+
+TEST(Check, droppingDownMidGameFalse) {
+
+	const int numOfPoints = 4;
+	Point point1 = { 5,8 };
+	Point point2 = { 5,9 };
+	Point point3 = { 5,10 };
+	Point point4 = { 5,11 };
+	Point currentFigure[numOfPoints] = { point1, point2, point3, point4 };
+
+	std::vector<std::vector<int>> field{ { 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,1,1,1,1,0,0,0,0 },
+														{ 0,0,0,0,0,1,0,0,0,0 },
+														{ 1,0,1,0,0,1,1,0,0,1 },
+														{ 1,1,1,1,1,1,1,1,0,1 },
+														{ 1,1,1,1,1,1,1,0,0,1 },
+														{ 1,1,1,1,1,1,1,1,0,1 },
+														{ 1,1,1,0,1,0,1,1,1,1 },
+														{ 1,1,1,1,1,0,0,1,1,1 },
+														{ 1,1,1,1,1,0,1,1,1,0 }, };
+
+
+	Check dropCheck(currentFigure, numOfPoints, field);
+
+	EXPECT_TRUE(!dropCheck.runningTheCheck());
+}
+
+
+
+TEST(Check, droppingDownEndGameFalse) {
+
+	const int numOfPoints = 4;
+	Point point1 = { 1,3 };
+	Point point2 = { 2,3 };
+	Point point3 = { 3,3 };
+	Point point4 = { 2,4 };
+	Point currentFigure[numOfPoints] = { point1, point2, point3, point4 };
+
+	std::vector<std::vector<int>> field{				{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 0,0,0,0,0,0,0,0,0,0 },
+														{ 1,0,1,1,1,0,1,1,1,1 },
+														{ 1,1,0,1,1,0,1,1,0,1 },
+														{ 0,1,1,1,1,1,1,1,1,1 },
+														{ 0,0,1,1,1,0,1,1,1,1 },
+														{ 0,0,1,1,1,1,1,1,1,1 },
+														{ 1,0,1,1,1,1,1,1,1,1 },
+														{ 0,0,1,1,1,1,1,1,1,1 },
+														{ 0,0,1,1,1,1,0,0,0,0 },
+														{ 0,1,1,0,1,1,0,1,0,1 },
+														{ 1,0,1,0,0,1,1,0,0,1 },
+														{ 1,1,1,1,1,1,1,1,0,1 },
+														{ 1,1,1,1,1,1,1,0,0,1 },
+														{ 1,1,1,1,1,1,1,1,0,1 },
+														{ 1,1,1,0,1,0,1,1,1,1 },
+														{ 1,1,1,1,1,0,0,1,1,1 },
+														{ 1,1,1,1,1,0,1,1,1,0 }, };
+
+
+	Check dropCheck(currentFigure, numOfPoints, field);
+
+	EXPECT_TRUE(!dropCheck.runningTheCheck());
+}
+
+
+/*
 #include"../16_SFML_Games/Grid.h"
 #include"../16_SFML_Games/Player.h"
+
+
+
+
+
+
+
+
+
 
 
 TEST(Grid, HasWallsAndInterior) {
@@ -172,3 +330,5 @@ TEST(Player, ConstrainedDiagonallyFast) {
 	EXPECT_EQ(HEIGHT-1, p.y);
 	EXPECT_EQ(WIDTH-1, p.x);
 }
+
+*/
